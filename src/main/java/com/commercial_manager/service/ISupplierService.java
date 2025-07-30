@@ -2,6 +2,7 @@ package com.commercial_manager.service;
 
 import com.commercial_manager.models.entity.Supplier;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ISupplierService {
@@ -12,5 +13,8 @@ public interface ISupplierService {
 
     Supplier findById(Long id);
 
+    List<Supplier> findAll();
+
+    String delete(Long id);
 
 }

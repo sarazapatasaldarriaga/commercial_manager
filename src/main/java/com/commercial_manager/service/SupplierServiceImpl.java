@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -70,4 +71,17 @@ public class SupplierServiceImpl implements ISupplierService {
     public Supplier findById(Long id) {
         return supplierRepository.findById(id);
     }
+
+    @Override
+    public List<Supplier> findAll() {
+        return supplierRepository.findAll();
+    }
+
+    @Override
+    public String delete(Long id) {
+        supplierRepository.delete(id);
+        return "Supplier successfully removed";
+    }
+
+
 }

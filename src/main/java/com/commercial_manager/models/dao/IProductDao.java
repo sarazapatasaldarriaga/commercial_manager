@@ -1,0 +1,7 @@
+package com.commercial_manager.models.dao;
+
+import com.commercial_manager.models.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IProductDao extends JpaRepository<Product, Long> {
+}
