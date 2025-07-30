@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "product")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // 👈 Aquí
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 2L;

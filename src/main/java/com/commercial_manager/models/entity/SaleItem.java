@@ -1,5 +1,7 @@
 package com.commercial_manager.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "sale_item")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SaleItem implements Serializable {
 
     private static final long serialVersionUID = 5L;
@@ -18,6 +21,7 @@ public class SaleItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sale_id")
     private Sale sale;
