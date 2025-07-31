@@ -1,5 +1,6 @@
 package com.commercial_manager.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "supplier")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;

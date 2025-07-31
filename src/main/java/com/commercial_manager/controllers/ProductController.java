@@ -1,7 +1,7 @@
 package com.commercial_manager.controllers;
 
-import com.commercial_manager.models.entity.Supplier;
-import com.commercial_manager.service.ISupplierService;
+import com.commercial_manager.models.entity.Product;
+import com.commercial_manager.service.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,46 +14,49 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/supplier")
-public class SupplierController {
+@RequestMapping("/api/product")
+public class ProductController {
 
     @Autowired
-    ISupplierService supplierService;
+    IProductService productService;
+
+    public ProductController(IProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("/list")
-    public List<Supplier> index() {
-        return supplierService.findAll();
+    public List<Product> index() {
+        return productService.findAll();
     }
 
     @GetMapping("/show/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Supplier show(@PathVariable Long id) {
-        Supplier response = null;
-        response = supplierService.findById(id);
+    public Product show(@PathVariable Long id) {
+        Product response = null;
+        response = productService.findById(id);
         return response;
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> save(@Valid @RequestBody Supplier supplier) {
+    public ResponseEntity<?> save(@Valid @RequestBody Product product) {
 
-        Map<String, Object> response = (Map<String, Object>) supplierService.save(supplier);
+        Map<String, Object> response = (Map<String, Object>) productService.save(product);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> update(@Valid @RequestBody Supplier supplier) {
+    public ResponseEntity<?> update(@Valid @RequestBody Product product) {
         Map<String, Object> response = new HashMap<>();
-        response = supplierService.update(supplier);
+        response = productService.update(product);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        String response = supplierService.delete(id);
+        String response = productService.delete(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }

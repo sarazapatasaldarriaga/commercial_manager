@@ -1,7 +1,7 @@
 package com.commercial_manager.service;
 
-import com.commercial_manager.models.entity.Supplier;
-import com.commercial_manager.models.repository.ISupplierRepository;
+import com.commercial_manager.models.entity.Sale;
+import com.commercial_manager.models.repository.ISaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SupplierServiceImpl implements ISupplierService {
+public class SaleServiceImpl implements ISaleService {
 
     @Autowired
-    private ISupplierRepository supplierRepository;
+    private ISaleRepository saleRepository;
 
     private static final String MESSAGE_KEY = "message";
     private static final String STATUS_KEY = "status";
@@ -29,11 +29,11 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
-    public Map<String, Object> save(Supplier supplier) {
+    public Map<String, Object> save(Sale sale) {
         try {
-            supplier.setDate(new Date());
-            Supplier newSupplier = supplierRepository.save(supplier);
-            if (newSupplier != null && newSupplier.getId() > 0) {
+            sale.setDate(new Date());
+            Sale newSale = saleRepository.save(sale);
+            if (newSale != null && newSale.getId() > 0) {
                 Map<String, Object> response = new HashMap<>();
                 response.put(MESSAGE_KEY, "Supplier successfully stored");
                 response.put(STATUS_KEY, true);
@@ -48,15 +48,16 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
-    public Map<String, Object> update(Supplier supplierInput) {
-        Supplier supplier = supplierRepository.findById(supplierInput.getId());
-        if (supplier == null) return generateError("Supplier not found.");
+    public Map<String, Object> update(Sale saleInput) {
+        Sale sale = saleRepository.findById(saleInput.getId());
+        if (sale == null) return generateError("Supplier not found.");
 
         try {
-            supplier.setName(supplierInput.getName());
-            supplier.setAddress(supplierInput.getAddress());
-            supplier.setPhone(supplierInput.getPhone());
-            supplierRepository.save(supplier);
+            sale.setId(saleInput.getId());
+            sale.setItems(saleInput.getItems());
+            sale.setDate(saleInput.getDate());
+            sale.setClient(saleInput.getClient());
+            saleRepository.save(sale);
 
             Map<String, Object> response = new HashMap<>();
             response.put(MESSAGE_KEY, "Supplier updated successfully");
@@ -68,18 +69,18 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
-    public Supplier findById(Long id) {
-        return supplierRepository.findById(id);
+    public Sale findById(Long id) {
+        return saleRepository.findById(id);
     }
 
     @Override
-    public List<Supplier> findAll() {
-        return supplierRepository.findAll();
+    public List<Sale> findAll() {
+        return saleRepository.findAll();
     }
 
     @Override
     public String delete(Long id) {
-        supplierRepository.delete(id);
+        saleRepository.delete(id);
         return "Supplier successfully removed";
     }
 
