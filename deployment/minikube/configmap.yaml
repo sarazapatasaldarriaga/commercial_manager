@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: commercial-manager-config-dev
+data:
+  application.properties: |
+    server.port=8081
+    spring.application.name=commercial_manager
+    spring.datasource.url=jdbc:h2:mem:commercial_manager
+    spring.datasource.driverClassName=org.h2.Driver
+    spring.datasource.username=admin_commercial_manager
+    spring.datasource.password=sa
+    spring.jpa.hibernate.ddl-auto=none
+    spring.sql.init.mode=always
+    spring.h2.console.enabled=true

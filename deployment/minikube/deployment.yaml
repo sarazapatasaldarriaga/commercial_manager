@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commercial-manager-deployment-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commercial-manager-dev
+  template:
+    metadata:
+      labels:
+        app: commercial-manager-dev
+    spec:
+      containers:
+        - name: commercial-manager
+          image: commercial-manager:latest
+          imagePullPolicy: Never # Important for local images
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: commercial-manager-config-dev
