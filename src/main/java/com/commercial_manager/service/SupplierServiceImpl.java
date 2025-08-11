@@ -84,4 +84,8 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
 
+    public long countSupplier(){
+        return supplierRepository.supplierCount();
+    }
+
 }

@@ -17,4 +17,6 @@ public interface IProductService {
 
     String delete(Long id);
 
+    long countProducts();
+
 }

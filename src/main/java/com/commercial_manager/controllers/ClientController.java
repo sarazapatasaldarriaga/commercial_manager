@@ -1,7 +1,7 @@
 package com.commercial_manager.controllers;
 
-import com.commercial_manager.models.entity.Supplier;
-import com.commercial_manager.service.ISupplierService;
+import com.commercial_manager.models.entity.Client;
+import com.commercial_manager.service.IClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,51 +14,54 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/supplier")
-public class SupplierController {
+@RequestMapping("/api/client")
+public class ClientController {
 
     @Autowired
-    ISupplierService supplierService;
+    IClientService clientService;
+
+    public ClientController(IClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @GetMapping("/list")
-    public List<Supplier> index() {
-        return supplierService.findAll();
+    public List<Client> index() {
+        return clientService.findAll();
     }
 
     @GetMapping("/show/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Supplier show(@PathVariable Long id) {
-        Supplier response = null;
-        response = supplierService.findById(id);
+    public Client show(@PathVariable Long id) {
+        Client response = null;
+        response = clientService.findById(id);
         return response;
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> save(@Valid @RequestBody Supplier supplier) {
-
-        Map<String, Object> response = (Map<String, Object>) supplierService.save(supplier);
+    public ResponseEntity<?> save(@Valid @RequestBody Client client) {
+        Map<String, Object> response = (Map<String, Object>) clientService.save(client);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> update(@Valid @RequestBody Supplier supplier) {
+    public ResponseEntity<?> update(@Valid @RequestBody Client client) {
         Map<String, Object> response = new HashMap<>();
-        response = supplierService.update(supplier);
+        response = clientService.update(client);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        String response = supplierService.delete(id);
+        String response = clientService.delete(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/count")
     @ResponseStatus(HttpStatus.OK)
-    public long supplierCount() {
-        return supplierService.countSupplier();
+    public long clientCount() {
+        return clientService.countClients();
     }
 }

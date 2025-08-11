@@ -14,4 +14,7 @@ public interface ISaleRepository {
 
      void delete(Long id);
 
+     long saleCount();
+
+
 }

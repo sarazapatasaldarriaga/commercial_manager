@@ -40,7 +40,6 @@ public class ProductController {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> save(@Valid @RequestBody Product product) {
-
         Map<String, Object> response = (Map<String, Object>) productService.save(product);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
@@ -58,5 +57,11 @@ public class ProductController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         String response = productService.delete(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    public long productCount() {
+        return productService.countProducts();
     }
 }
