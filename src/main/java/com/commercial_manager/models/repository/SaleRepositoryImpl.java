@@ -37,4 +37,8 @@ public class SaleRepositoryImpl implements ISaleRepository {
         saleDao.deleteById(id);
     }
 
+    public long saleCount() {
+        return saleDao.saleCount();
+    }
+
 }

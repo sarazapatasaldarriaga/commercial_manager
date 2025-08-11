@@ -17,4 +17,6 @@ public interface ISupplierService {
 
     String delete(Long id);
 
+    long countSupplier();
+
 }

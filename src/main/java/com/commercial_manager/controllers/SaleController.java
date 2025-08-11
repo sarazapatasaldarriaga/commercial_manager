@@ -1,16 +1,13 @@
 package com.commercial_manager.controllers;
 
 import com.commercial_manager.models.entity.Sale;
-import com.commercial_manager.models.entity.Supplier;
 import com.commercial_manager.service.ISaleService;
-import com.commercial_manager.service.ISupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,5 +55,11 @@ public class SaleController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         String result = saleService.delete(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    public long saleCount() {
+        return saleService.countSale();
     }
 }

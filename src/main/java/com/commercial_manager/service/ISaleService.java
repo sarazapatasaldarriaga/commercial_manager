@@ -18,4 +18,6 @@ public interface ISaleService {
 
     String delete(Long id);
 
+    long countSale();
+
 }

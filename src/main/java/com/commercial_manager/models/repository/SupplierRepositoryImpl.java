@@ -37,4 +37,8 @@ public class SupplierRepositoryImpl implements ISupplierRepository {
         supplierDao.deleteById(id);
     }
 
+    public long supplierCount() {
+        return supplierDao.supplierCount();
+    }
+
 }

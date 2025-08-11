@@ -15,4 +15,8 @@ public interface IProductRepository {
 
      void delete(Long id);
 
+     long productCount();
+
+
+
 }

@@ -82,5 +82,9 @@ public class ProductServiceImpl implements IProductService {
         return "Product successfully removed";
     }
 
+    public long countProducts(){
+        return productRepository.productCount();
+    }
+
 
 }

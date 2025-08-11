@@ -38,3 +38,4 @@ CREATE TABLE sale_item (
   CONSTRAINT fk_sale FOREIGN KEY (sale_id) REFERENCES sale(id),
   CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product(id)
 );
+

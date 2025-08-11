@@ -84,5 +84,9 @@ public class SaleServiceImpl implements ISaleService {
         return "Supplier successfully removed";
     }
 
+    public long countSale(){
+        return saleRepository.saleCount();
+    }
+
 
 }

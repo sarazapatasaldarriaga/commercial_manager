@@ -37,4 +37,7 @@ public class ProductRepositoryImpl implements IProductRepository {
         productDao.deleteById(id);
     }
 
+    public long productCount() {
+        return productDao.productCount();
+    }
 }

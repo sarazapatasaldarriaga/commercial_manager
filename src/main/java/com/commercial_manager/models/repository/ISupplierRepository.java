@@ -14,4 +14,7 @@ public interface ISupplierRepository {
 
      void delete(Long id);
 
+     long supplierCount();
+
+
 }
