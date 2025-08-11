@@ -205,16 +205,15 @@ resource "aws_codepipeline" "app_pipeline" {
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "ThirdParty" # Changed to ThirdParty for GitHub
-      provider         = "GitHub"     # Changed to GitHub
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = var.codestar_connection_arn # New: Use CodeStar Connection ARN
-        FullRepositoryId = var.source_repo_name        # e.g., "owner/repo-name"
-        BranchName       = var.source_repo_branch
-        OutputArtifactFormat = "CODEPIPELINE_JSON" # Recommended for GitHub connections
+        ConnectionArn        = var.codestar_connection_arn
+        FullRepositoryId     = var.source_repo_name
+        BranchName           = var.source_repo_branch
       }
     }
   }
