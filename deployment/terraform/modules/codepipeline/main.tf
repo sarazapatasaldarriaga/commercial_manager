@@ -2,12 +2,15 @@ resource "aws_s3_bucket" "codepipeline_artifacts" {
   bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}"
   acl    = "private"
 
-  versioning {
-    enabled = true
-  }
-
   tags = {
     Project = var.project_name
+  }
+}
+
+resource "aws_s3_bucket_versioning" "codepipeline_artifacts_versioning" {
+  bucket = aws_s3_bucket.codepipeline_artifacts.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
