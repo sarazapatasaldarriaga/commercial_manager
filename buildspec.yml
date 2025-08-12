@@ -11,8 +11,7 @@ phases:
       - echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
       - echo "ECR_REPOSITORY_URI: $ECR_REPOSITORY_URI"
       - echo "IMAGE_TAG: $IMAGE_TAG"
-      - echo "---"
-      - echo Logging in to Amazon ECR...
+      - echo "Logging in to Amazon ECR..."
       - aws --version
       - echo "Executing: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
@@ -25,7 +24,7 @@ phases:
       - echo "REPOSITORY_URI: $REPOSITORY_URI"
       - echo "IMAGE_TAG: $IMAGE_TAG"
       - echo "---"
-      - echo Build started on `date`
+      - echo Build started on $(date)
       - echo Building the Docker image...
       - echo "Executing: docker build -t $REPOSITORY_URI:$IMAGE_TAG ."
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
@@ -38,7 +37,7 @@ phases:
       - echo "REPOSITORY_URI: $REPOSITORY_URI"
       - echo "IMAGE_TAG: $IMAGE_TAG"
       - echo "---"
-      - echo Build completed on `date`
+      - echo Build completed on $(date)
       - echo Pushing the Docker images...
       - echo "Executing: docker push $REPOSITORY_URI:$IMAGE_TAG"
       - docker push $REPOSITORY_URI:$IMAGE_TAG
@@ -47,5 +46,5 @@ phases:
       - echo "---"
 artifacts:
   files:
-    - '**/*'
+    - "**/*"
   base-directory: target/
