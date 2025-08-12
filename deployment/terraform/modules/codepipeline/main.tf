@@ -100,6 +100,24 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Effect   = "Allow",
         Resource = var.codestar_connection_arn
+      },
+      {
+        Action = [
+          "ecs:DescribeServices",
+          "ecs:UpdateService",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeTaskDefinition",
+          "ecs:ListTasks"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      },
+      {
+        Action = [
+          "iam:PassRole"
+        ],
+        Effect   = "Allow",
+        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole" # Assuming a common ECS task execution role name
       }
     ]
   })
@@ -202,7 +220,7 @@ resource "aws_codebuild_project" "app_build" {
     }
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = "commercial-manager-image" # Please change this
+      value = "commercial-manager-repository" # Please change this
     }
     environment_variable {
       name  = "CONTAINER_NAME"
