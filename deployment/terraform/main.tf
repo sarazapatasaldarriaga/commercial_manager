@@ -27,7 +27,7 @@ variable "project_name" {
 variable "github_repo_owner_name" {
   description = "The full repository ID (e.g., 'owner/repo-name') for the GitHub source."
   type        = string
-  # Example: default = "your-github-username/your-repo-name"
+  default = "sarazapatasaldarriaga/commercial_manager"
 }
 
 variable "github_branch_name" {
@@ -41,6 +41,17 @@ variable "codestar_connection_arn" {
   type        = string
 }
 
+# Data sources for VPC and subnets
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
 
 # ECR Module
 module "ecr" {
@@ -60,6 +71,21 @@ module "codepipeline" {
   source_repo_name      = var.github_repo_owner_name
   source_repo_branch    = var.github_branch_name
   codestar_connection_arn = var.codestar_connection_arn
+  ecs_cluster_name      = module.ecs.cluster_name
+  ecs_service_name      = module.ecs.service_name
+}
+
+# ECS Module
+module "ecs" {
+  source = "./modules/ecs"
+
+  project_name       = var.project_name
+  aws_region         = var.aws_region
+  vpc_id             = data.aws_vpc.default.id
+  private_subnets    = data.aws_subnets.private.ids
+  container_port     = 8081 # As defined in your application.properties
+  container_name     = "commercial-manager-container" # Or your desired container name
+  ecr_repository_url = module.ecr.repository_url
 }
 
 output "ecr_repository_url" {
@@ -75,4 +101,14 @@ output "codepipeline_url" {
 output "codebuild_project_name" {
   description = "The name of the CodeBuild project."
   value       = module.codepipeline.codebuild_project_name
+}
+
+output "ecs_cluster_name" {
+  description = "The name of the ECS cluster."
+  value       = module.ecs.cluster_name
+}
+
+output "ecs_service_name" {
+  description = "The name of the ECS service."
+  value       = module.ecs.service_name
 }

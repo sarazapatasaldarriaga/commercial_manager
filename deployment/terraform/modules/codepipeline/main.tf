@@ -1,10 +1,25 @@
 resource "aws_s3_bucket" "codepipeline_artifacts" {
   bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}"
-  acl    = "private"
 
   tags = {
     Project = var.project_name
   }
+}
+
+resource "aws_s3_bucket_ownership_controls" "codepipeline_artifacts_ownership" {
+  bucket = aws_s3_bucket.codepipeline_artifacts.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "codepipeline_artifacts_public_access_block" {
+  bucket = aws_s3_bucket.codepipeline_artifacts.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_versioning" "codepipeline_artifacts_versioning" {
@@ -61,14 +76,20 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       },
       {
         Action = [
+          "ecr:GetAuthorizationToken"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      },
+      {
+        Action = [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "ecr:BatchCheckLayerAvailability",
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:GetAuthorizationToken"
+          "ecr:CompleteLayerUpload"
         ],
         Effect   = "Allow",
         Resource = var.ecr_repository_arn
@@ -131,17 +152,23 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       },
       {
         Action = [
+          "ecr:GetAuthorizationToken"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      },
+      {
+        Action = [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "ecr:BatchCheckLayerAvailability",
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:GetAuthorizationToken"
+          "ecr:CompleteLayerUpload"
         ],
         Effect   = "Allow",
-        Resource = var.ecr_repository_arn
+        Resource = "*"
       }
     ]
   })
@@ -170,16 +197,16 @@ resource "aws_codebuild_project" "app_build" {
       value = data.aws_caller_identity.current.account_id
     }
     environment_variable {
-      name  = "AWS_REGION"
+      name  = "AWS_DEFAULT_REGION"
       value = var.aws_region
     }
     environment_variable {
-      name  = "ECR_REPOSITORY_URI"
-      value = var.ecr_repository_url
+      name  = "IMAGE_REPO_NAME"
+      value = "commercial-manager-image" # Please change this
     }
     environment_variable {
-      name  = "IMAGE_TAG"
-      value = "latest" # Or use a dynamic tag from CodePipeline
+      name  = "CONTAINER_NAME"
+      value = "commercial-manager-container" # Please change this
     }
   }
 
@@ -234,6 +261,24 @@ resource "aws_codepipeline" "app_pipeline" {
 
       configuration = {
         ProjectName = aws_codebuild_project.app_build.name
+      }
+    }
+  }
+
+  stage {
+    name = "Deploy"
+    action {
+      name            = "DeployToECS"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = "1"
+      input_artifacts = ["build_output"]
+
+      configuration = {
+        ClusterName = var.ecs_cluster_name
+        ServiceName = var.ecs_service_name
+        FileName    = "imagedefinitions.json"
       }
     }
   }
