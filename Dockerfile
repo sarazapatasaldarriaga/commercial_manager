@@ -1,5 +1,5 @@
 # Stage 1: Build the application using Maven
-FROM docker.io/library/maven:3.9-eclipse-temurin-21 AS builder
+FROM public.ecr.aws/docker/library/maven:3.9-eclipse-temurin-21 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Stage 2: Create the final, lightweight image
-FROM docker.io/library/eclipse-temurin:21-jre-jammy
+FROM public.ecr.aws/eclipse-temurin/eclipse-temurin:21-jre-jammy
 
 # Set the working directory
 WORKDIR /app
