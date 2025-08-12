@@ -21,11 +21,13 @@ variable "private_subnets" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
+  default     = 8080
 }
 
 variable "container_name" {
   description = "The name of the container."
   type        = string
+  default     = "commercial-manager-container"
 }
 
 variable "ecr_repository_url" {

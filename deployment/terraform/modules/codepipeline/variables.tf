@@ -21,6 +21,7 @@ variable "ecr_repository_arn" {
 variable "source_repo_name" {
   description = "The full repository ID (e.g., 'owner/repo-name') for the GitHub source."
   type        = string
+  default     = "sarazapatasaldarriaga/commercial_manager"
 }
 
 variable "source_repo_branch" {

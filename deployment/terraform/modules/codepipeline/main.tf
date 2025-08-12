@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "codepipeline_artifacts" {
   bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}"
+  force_destroy = true # Required to delete bucket even if it contains objects
 
   tags = {
     Project = var.project_name
@@ -220,11 +221,11 @@ resource "aws_codebuild_project" "app_build" {
     }
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = "commercial-manager-repository" # Please change this
+      value = var.ecr_repository_url # Dynamically set from ECR module
     }
     environment_variable {
       name  = "CONTAINER_NAME"
-      value = "commercial-manager-container" # Please change this
+      value = var.ecs_service_name # Dynamically set from ECS module
     }
   }
 
