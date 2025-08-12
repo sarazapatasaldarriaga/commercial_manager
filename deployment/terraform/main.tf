@@ -95,8 +95,8 @@ module "ecs" {
   aws_region         = var.aws_region
   vpc_id             = data.aws_vpc.default.id
   private_subnets    = data.aws_subnets.private.ids
-  container_port     = 8081 # As defined in your application.properties
-  container_name     = "commercial-manager-container" # Or your desired container name
+  container_port     = var.container_port
+  container_name     = var.container_name
   ecr_repository_url = module.ecr.repository_url
 }
 
