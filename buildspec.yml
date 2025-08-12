@@ -6,7 +6,6 @@ phases:
       java: corretto17 # Or the Java version your application uses
   pre_build:
     commands:
-      - echo "--- DEBUGGING PRE-BUILD ---"
       - echo "AWS_REGION: $AWS_REGION"
       - echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
       - echo "ECR_REPOSITORY_URI: $ECR_REPOSITORY_URI"
