@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Stage 2: Create the final, lightweight image
-FROM public.ecr.aws/eclipse-temurin/eclipse-temurin:21-jre-jammy
+FROM public.ecr.aws/ubuntu/jre:21-24.04_stable
 
 # Set the working directory
 WORKDIR /app
