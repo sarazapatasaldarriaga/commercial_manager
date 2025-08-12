@@ -6,44 +6,44 @@ phases:
       java: corretto17 # Or the Java version your application uses
   pre_build:
     commands:
-      - echo "AWS_REGION: $AWS_REGION"
-      - echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
-      - echo "ECR_REPOSITORY_URI: $ECR_REPOSITORY_URI"
-      - echo "IMAGE_TAG: $IMAGE_TAG"
-      - echo "Logging in to Amazon ECR..."
+      - echo AWS_REGION $AWS_REGION
+      - echo AWS_ACCOUNT_ID $AWS_ACCOUNT_ID
+      - echo ECR_REPOSITORY_URI $ECR_REPOSITORY_URI
+      - echo IMAGE_TAG $IMAGE_TAG
+      - echo Logging in to Amazon ECR...
       - aws --version
-      - echo "Executing: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+      - echo Executing aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - REPOSITORY_URI=$ECR_REPOSITORY_URI
       - IMAGE_TAG=$IMAGE_TAG
-      - echo "---"
+      - echo ---
   build:
     commands:
-      - echo "--- DEBUGGING BUILD ---"
-      - echo "REPOSITORY_URI: $REPOSITORY_URI"
-      - echo "IMAGE_TAG: $IMAGE_TAG"
-      - echo "---"
+      - echo --- DEBUGGING BUILD ---
+      - echo REPOSITORY_URI $REPOSITORY_URI
+      - echo IMAGE_TAG $IMAGE_TAG
+      - echo ---
       - echo Build started on $(date)
       - echo Building the Docker image...
-      - echo "Executing: docker build -t $REPOSITORY_URI:$IMAGE_TAG ."
+      - echo Executing docker build -t $REPOSITORY_URI:$IMAGE_TAG .
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-      - echo "Executing: docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest"
+      - echo Executing docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest
       - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest
-      - echo "---"
+      - echo ---
   post_build:
     commands:
-      - echo "--- DEBUGGING POST-BUILD ---"
-      - echo "REPOSITORY_URI: $REPOSITORY_URI"
-      - echo "IMAGE_TAG: $IMAGE_TAG"
-      - echo "---"
+      - echo --- DEBUGGING POST-BUILD ---
+      - echo REPOSITORY_URI $REPOSITORY_URI
+      - echo IMAGE_TAG $IMAGE_TAG
+      - echo ---
       - echo Build completed on $(date)
       - echo Pushing the Docker images...
-      - echo "Executing: docker push $REPOSITORY_URI:$IMAGE_TAG"
+      - echo Executing docker push $REPOSITORY_URI:$IMAGE_TAG
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Executing: docker push $REPOSITORY_URI:latest"
+      - echo Executing docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:latest
-      - echo "---"
+      - echo ---
 artifacts:
   files:
-    - "**/*"
+    - **/*
   base-directory: target/
