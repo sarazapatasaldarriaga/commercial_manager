@@ -225,7 +225,7 @@ resource "aws_codebuild_project" "app_build" {
     }
     environment_variable {
       name  = "CONTAINER_NAME"
-      value = var.ecs_service_name # Dynamically set from ECS module
+      value = var.container_name # Set to the actual container name from ECS task definition
     }
   }
 
