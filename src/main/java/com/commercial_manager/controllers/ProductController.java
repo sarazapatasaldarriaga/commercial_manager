@@ -1,6 +1,7 @@
 package com.commercial_manager.controllers;
 
 import com.commercial_manager.models.entity.Product;
+import com.commercial_manager.service.ICloudWatchMetricsService;
 import com.commercial_manager.service.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class ProductController {
 
     @Autowired
     IProductService productService;
+    ICloudWatchMetricsService metricsService;
+
 
     public ProductController(IProductService productService) {
         this.productService = productService;
@@ -26,6 +29,7 @@ public class ProductController {
 
     @GetMapping("/list")
     public List<Product> index() {
+        metricsService.sendMetric("list",1 , "product");
         return productService.findAll();
     }
 
