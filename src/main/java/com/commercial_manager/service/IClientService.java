@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface IClientService {
 
-   Map<String, Object> save(Client client);
+    Map<String, Object> save(Client client);
 
     Map<String, Object> update(Client client);
 

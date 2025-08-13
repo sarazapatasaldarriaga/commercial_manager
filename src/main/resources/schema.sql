@@ -1,3 +1,7 @@
+CREATE DATABASE my_database;
+
+USE my_database
+
 CREATE TABLE supplier (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
