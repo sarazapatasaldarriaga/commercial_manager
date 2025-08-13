@@ -21,7 +21,7 @@ variable "private_subnets" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
-  default     = 8080
+  default     = 80
 }
 
 variable "container_name" {

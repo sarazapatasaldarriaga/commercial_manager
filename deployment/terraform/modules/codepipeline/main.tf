@@ -118,7 +118,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "iam:PassRole"
         ],
         Effect   = "Allow",
-        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole" # Assuming a common ECS task execution role name
+        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.project_name}-ecs-task-execution-role"
       }
     ]
   })

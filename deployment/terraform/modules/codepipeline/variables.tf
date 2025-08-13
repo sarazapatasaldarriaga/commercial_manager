@@ -44,3 +44,8 @@ variable "ecs_service_name" {
   description = "The name of the ECS service."
   type        = string
 }
+
+variable "container_name" {
+  description = "The name of the container within the ECS task definition."
+  type        = string
+}

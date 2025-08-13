@@ -3,6 +3,14 @@ resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
 }
 
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name = "/ecs/${var.project_name}-service"
+
+  tags = {
+    Project = var.project_name
+  }
+}
+
 # IAM Role for ECS Tasks
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.project_name}-ecs-task-execution-role"
@@ -66,6 +74,14 @@ resource "aws_ecs_task_definition" "main" {
           hostPort      = var.container_port
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ecs_logs.name
+          "awslogs-region"        = var.aws_region
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }

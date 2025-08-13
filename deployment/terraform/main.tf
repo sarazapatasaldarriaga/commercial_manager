@@ -44,7 +44,7 @@ variable "codestar_connection_arn" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
-  default     = 8081
+  default     = 80
 }
 
 variable "container_name" {
@@ -85,6 +85,7 @@ module "codepipeline" {
   codestar_connection_arn = var.codestar_connection_arn
   ecs_cluster_name      = module.ecs.cluster_name
   ecs_service_name      = module.ecs.service_name
+  container_name        = var.container_name
 }
 
 # ECS Module
