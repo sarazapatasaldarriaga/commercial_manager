@@ -33,5 +33,6 @@ build/
 .vscode/
 
 ### Terraform ###
-.terraform
-deployment/terraform/terraform.tfvars
+**/.terraform*
+**/terraform.tfvars
+**/terraform.tfstate*
