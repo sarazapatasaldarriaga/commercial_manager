@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0" # Use a compatible version
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1"
+    }
   }
 }
 
@@ -15,7 +19,7 @@ provider "aws" {
 variable "aws_region" {
   description = "The AWS region to deploy resources into."
   type        = string
-  default     = "us-east-1" # Set your desired default region
+  default     = "us-east-2" # Set your desired default region
 }
 
 variable "project_name" {
@@ -44,13 +48,19 @@ variable "codestar_connection_arn" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
-  default     = 80
+  default     = 8081
 }
 
 variable "container_name" {
   description = "The name of the container."
   type        = string
   default     = "commercial-manager-container"
+}
+
+variable "health_check_path" {
+  description = "The health check path for the target group."
+  type        = string
+  default     = "/"
 }
 
 # Data sources for VPC and subnets
@@ -62,6 +72,17 @@ data "aws_subnets" "private" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
+  }
+}
+
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+  filter {
+    name   = "map-public-ip-on-launch"
+    values = ["true"]
   }
 }
 
@@ -88,17 +109,30 @@ module "codepipeline" {
   container_name        = var.container_name
 }
 
+# ALB Module
+module "alb" {
+  source = "./modules/alb"
+
+  project_name      = var.project_name
+  vpc_id            = data.aws_vpc.default.id
+  public_subnets    = data.aws_subnets.public.ids
+  target_port       = var.container_port
+  health_check_path = var.health_check_path
+}
+
 # ECS Module
 module "ecs" {
   source = "./modules/ecs"
 
-  project_name       = var.project_name
-  aws_region         = var.aws_region
-  vpc_id             = data.aws_vpc.default.id
-  private_subnets    = data.aws_subnets.private.ids
-  container_port     = var.container_port
-  container_name     = var.container_name
-  ecr_repository_url = module.ecr.repository_url
+  project_name         = var.project_name
+  aws_region           = var.aws_region
+  vpc_id               = data.aws_vpc.default.id
+  private_subnets      = data.aws_subnets.private.ids
+  container_port       = var.container_port
+  container_name       = var.container_name
+  ecr_repository_url   = module.ecr.repository_url
+  target_group_arn     = module.alb.target_group_arn
+  alb_security_group_id = module.alb.alb_security_group_id
 }
 
 output "ecr_repository_url" {
@@ -124,4 +158,14 @@ output "ecs_cluster_name" {
 output "ecs_service_name" {
   description = "The name of the ECS service."
   value       = module.ecs.service_name
+}
+
+output "alb_dns_name" {
+  description = "The DNS name of the Application Load Balancer."
+  value       = module.alb.alb_dns_name
+}
+
+output "alb_url" {
+  description = "The URL of the Application Load Balancer."
+  value       = "http://${module.alb.alb_dns_name}"
 }

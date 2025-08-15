@@ -37,14 +37,14 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 # Security Group for the ECS Service
 resource "aws_security_group" "ecs_service" {
   name        = "${var.project_name}-ecs-service-sg"
-  description = "Allow traffic to the ECS service"
+  description = "Allow traffic to the ECS service from ALB"
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port   = var.container_port
-    to_port     = var.container_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = var.container_port
+    to_port         = var.container_port
+    protocol        = "tcp"
+    security_groups = [var.alb_security_group_id]
   }
 
   egress {
@@ -52,6 +52,11 @@ resource "aws_security_group" "ecs_service" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name    = "${var.project_name}-ecs-service-sg"
+    Project = var.project_name
   }
 }
 
@@ -98,6 +103,12 @@ resource "aws_ecs_service" "main" {
     subnets         = var.private_subnets
     security_groups = [aws_security_group.ecs_service.id]
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = var.container_name
+    container_port   = var.container_port
   }
 
   depends_on = [aws_iam_service_linked_role.ecs]

@@ -21,7 +21,7 @@ variable "private_subnets" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
-  default     = 80
+  default     = 8081
 }
 
 variable "container_name" {
@@ -32,5 +32,15 @@ variable "container_name" {
 
 variable "ecr_repository_url" {
   description = "The URL of the ECR repository."
+  type        = string
+}
+
+variable "target_group_arn" {
+  description = "The ARN of the target group for the load balancer."
+  type        = string
+}
+
+variable "alb_security_group_id" {
+  description = "The security group ID of the ALB."
   type        = string
 }

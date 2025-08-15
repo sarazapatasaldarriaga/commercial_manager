@@ -1,5 +1,11 @@
+resource "random_string" "bucket_suffix" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
 resource "aws_s3_bucket" "codepipeline_artifacts" {
-  bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}"
+  bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}-${random_string.bucket_suffix.result}"
   force_destroy = true # Required to delete bucket even if it contains objects
 
   tags = {
@@ -59,7 +65,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:PutObject",
           "s3:PutObjectAcl",
           "s3:GetBucketVersioning",
-          "s3:ListBucket"
+          "s3:ListBucket",
+          "s3:ListObjectsV2"
         ],
         Effect   = "Allow",
         Resource = [
@@ -161,7 +168,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "s3:GetObject",
           "s3:PutObject",
           "s3:GetBucketVersioning",
-          "s3:ListBucket"
+          "s3:ListBucket",
+          "s3:ListObjectsV2"
         ],
         Effect   = "Allow",
         Resource = [
