@@ -39,7 +39,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets           = var.public_subnets
+  subnets            = var.public_subnets
 
   enable_deletion_protection = false
 
@@ -51,9 +51,9 @@ resource "aws_lb" "main" {
 
 # Target Group
 resource "aws_lb_target_group" "main" {
-  name        = "${var.project_name}-tg-v2"
+  name        = "${var.project_name}-tg"
   port        = var.target_port
-  protocol    = "HTTPS"
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
@@ -64,7 +64,7 @@ resource "aws_lb_target_group" "main" {
     matcher             = "200,302,404"
     path                = var.health_check_path
     port                = "traffic-port"
-    protocol            = "HTTPS"
+    protocol            = "HTTP"
     timeout             = 5
     unhealthy_threshold = 2
   }
@@ -81,33 +81,16 @@ resource "aws_lb_listener" "http" {
   port              = "80"
   protocol          = "HTTP"
 
-  # Redirect HTTP to HTTPS if certificate is provided
-  dynamic "default_action" {
-    for_each = var.certificate_arn != "" ? [1] : []
-    content {
-      type = "redirect"
-      redirect {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-  }
-
-  # Forward to target group if no certificate
-  dynamic "default_action" {
-    for_each = var.certificate_arn == "" ? [1] : []
-    content {
-      type             = "forward"
-      target_group_arn = aws_lb_target_group.main.arn
-    }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.main.arn
   }
 }
 
 # HTTPS Listener (only if certificate is provided)
 resource "aws_lb_listener" "https" {
   count = var.certificate_arn != "" ? 1 : 0
-  
+
   load_balancer_arn = aws_lb.main.arn
   port              = "443"
   protocol          = "HTTPS"

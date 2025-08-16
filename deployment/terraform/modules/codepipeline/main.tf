@@ -5,7 +5,7 @@ resource "random_string" "bucket_suffix" {
 }
 
 resource "aws_s3_bucket" "codepipeline_artifacts" {
-  bucket = "${var.project_name}-codepipeline-artifacts-${var.aws_region}-${random_string.bucket_suffix.result}"
+  bucket        = "${var.project_name}-codepipeline-artifacts-${var.aws_region}-${random_string.bucket_suffix.result}"
   force_destroy = true # Required to delete bucket even if it contains objects
 
   tags = {
@@ -54,8 +54,8 @@ resource "aws_iam_role" "codepipeline_role" {
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name   = "${var.project_name}-codepipeline-policy"
-  role   = aws_iam_role.codepipeline_role.id
+  name = "${var.project_name}-codepipeline-policy"
+  role = aws_iam_role.codepipeline_role.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -68,7 +68,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:ListBucket",
           "s3:ListObjectsV2"
         ],
-        Effect   = "Allow",
+        Effect = "Allow",
         Resource = [
           aws_s3_bucket.codepipeline_artifacts.arn,
           "${aws_s3_bucket.codepipeline_artifacts.arn}/*"
@@ -149,8 +149,8 @@ resource "aws_iam_role" "codebuild_role" {
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  name   = "${var.project_name}-codebuild-policy"
-  role   = aws_iam_role.codebuild_role.id
+  name = "${var.project_name}-codebuild-policy"
+  role = aws_iam_role.codebuild_role.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -171,7 +171,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "s3:ListBucket",
           "s3:ListObjectsV2"
         ],
-        Effect   = "Allow",
+        Effect = "Allow",
         Resource = [
           aws_s3_bucket.codepipeline_artifacts.arn,
           "${aws_s3_bucket.codepipeline_artifacts.arn}/*"
@@ -268,9 +268,9 @@ resource "aws_codepipeline" "app_pipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn        = var.codestar_connection_arn
-        FullRepositoryId     = var.source_repo_name
-        BranchName           = var.source_repo_branch
+        ConnectionArn    = var.codestar_connection_arn
+        FullRepositoryId = var.source_repo_name
+        BranchName       = var.source_repo_branch
       }
     }
   }
@@ -278,12 +278,12 @@ resource "aws_codepipeline" "app_pipeline" {
   stage {
     name = "Build"
     action {
-      name            = "BuildAndPush"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      version         = "1"
-      input_artifacts = ["source_output"]
+      name             = "BuildAndPush"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = ["source_output"]
       output_artifacts = ["build_output"]
 
       configuration = {

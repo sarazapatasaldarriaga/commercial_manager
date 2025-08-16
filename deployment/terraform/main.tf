@@ -31,7 +31,7 @@ variable "project_name" {
 variable "github_repo_owner_name" {
   description = "The full repository ID (e.g., 'owner/repo-name') for the GitHub source."
   type        = string
-  default = "sarazapatasaldarriaga/commercial_manager"
+  default     = "sarazapatasaldarriaga/commercial_manager"
 }
 
 variable "github_branch_name" {
@@ -97,16 +97,16 @@ module "ecr" {
 module "codepipeline" {
   source = "./modules/codepipeline"
 
-  project_name          = var.project_name
-  aws_region            = var.aws_region
-  ecr_repository_url    = module.ecr.repository_url
-  ecr_repository_arn    = module.ecr.repository_arn
-  source_repo_name      = var.github_repo_owner_name
-  source_repo_branch    = var.github_branch_name
+  project_name            = var.project_name
+  aws_region              = var.aws_region
+  ecr_repository_url      = module.ecr.repository_url
+  ecr_repository_arn      = module.ecr.repository_arn
+  source_repo_name        = var.github_repo_owner_name
+  source_repo_branch      = var.github_branch_name
   codestar_connection_arn = var.codestar_connection_arn
-  ecs_cluster_name      = module.ecs.cluster_name
-  ecs_service_name      = module.ecs.service_name
-  container_name        = var.container_name
+  ecs_cluster_name        = module.ecs.cluster_name
+  ecs_service_name        = module.ecs.service_name
+  container_name          = var.container_name
 }
 
 # ALB Module
@@ -124,14 +124,14 @@ module "alb" {
 module "ecs" {
   source = "./modules/ecs"
 
-  project_name         = var.project_name
-  aws_region           = var.aws_region
-  vpc_id               = data.aws_vpc.default.id
-  private_subnets      = data.aws_subnets.private.ids
-  container_port       = var.container_port
-  container_name       = var.container_name
-  ecr_repository_url   = module.ecr.repository_url
-  target_group_arn     = module.alb.target_group_arn
+  project_name          = var.project_name
+  aws_region            = var.aws_region
+  vpc_id                = data.aws_vpc.default.id
+  private_subnets       = data.aws_subnets.private.ids
+  container_port        = var.container_port
+  container_name        = var.container_name
+  ecr_repository_url    = module.ecr.repository_url
+  target_group_arn      = module.alb.target_group_arn
   alb_security_group_id = module.alb.alb_security_group_id
 }
 
