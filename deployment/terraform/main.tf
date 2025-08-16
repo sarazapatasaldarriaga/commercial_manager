@@ -48,7 +48,7 @@ variable "codestar_connection_arn" {
 variable "container_port" {
   description = "The port that the container listens on."
   type        = number
-  default     = 8081
+  default     = 80
 }
 
 variable "container_name" {
