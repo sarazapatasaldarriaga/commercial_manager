@@ -235,8 +235,8 @@ resource "aws_codebuild_project" "app_build" {
       value = var.aws_region
     }
     environment_variable {
-      name  = "PROJECT_NAME"
-      value = var.project_name
+      name  = "IMAGE_REPO_NAME"
+      value = "${var.project_name}-repository"
     }
     environment_variable {
       name  = "CONTAINER_NAME"
