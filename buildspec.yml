@@ -10,20 +10,19 @@ phases:
       - echo Logging in to Amazon ECR...
       - REPOSITORY_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${PROJECT_NAME}-repository"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - IMAGE_TAG=latest
       - echo REPOSITORY_URI=$REPOSITORY_URI
       - echo IMAGE_TAG=$IMAGE_TAG
 
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      - docker build -t "$REPOSITORY_URI:$IMAGE_TAG" .
 
   post_build:
     commands:
       - echo Pushing the Docker image to Amazon ECR...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push "$REPOSITORY_URI:$IMAGE_TAG"
       - echo Writing image definitions file for CodePipeline...
       - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPOSITORY_URI:$IMAGE_TAG" > imagedefinitions.json
 
