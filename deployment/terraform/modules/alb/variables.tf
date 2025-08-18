@@ -22,7 +22,7 @@ variable "target_port" {
 variable "health_check_path" {
   description = "The health check path for the target group."
   type        = string
-  default     = "/health"
+  default     = "/actuator/health"
 }
 
 variable "certificate_arn" {

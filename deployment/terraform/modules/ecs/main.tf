@@ -141,6 +141,8 @@ resource "aws_ecs_service" "main" {
     container_port   = var.container_port
   }
 
+  health_check_grace_period_seconds = 60
+
   depends_on = [aws_iam_service_linked_role.ecs]
 }
 
