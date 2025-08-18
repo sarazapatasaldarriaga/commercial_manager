@@ -63,6 +63,38 @@ variable "health_check_path" {
   default     = "/"
 }
 
+variable "front_endpoint" {
+  description = "S3 URL for Cross-origin permission"
+  type        = string
+  default     = ""
+}
+
+variable "db_endpoint" {
+  description = "The endpoint of the database."
+  type        = string
+}
+
+variable "db_port" {
+  description = "The port of the database."
+  type        = number
+}
+
+variable "db_name" {
+  description = "The name of the database."
+  type        = string
+}
+
+variable "db_username" {
+  description = "The username for the database."
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the database."
+  type        = string
+  sensitive   = true
+}
+
 # Data sources for VPC and subnets
 data "aws_vpc" "default" {
   default = true
@@ -133,6 +165,12 @@ module "ecs" {
   ecr_repository_url   = module.ecr.repository_url
   target_group_arn     = module.alb.target_group_arn
   alb_security_group_id = module.alb.alb_security_group_id
+  db_endpoint          = var.db_endpoint
+  db_port              = var.db_port
+  db_name              = var.db_name
+  db_username          = var.db_username
+  db_password          = var.db_password
+  front_endpoint       = var.front_endpoint
 }
 
 output "ecr_repository_url" {

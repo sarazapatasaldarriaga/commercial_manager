@@ -111,6 +111,13 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       },
       {
         Action = [
+          "codestar-connections:PassConnection"
+        ],
+        Effect   = "Allow",
+        Resource = var.codestar_connection_arn
+      },
+      {
+        Action = [
           "ecs:DescribeServices",
           "ecs:UpdateService",
           "ecs:RegisterTaskDefinition",
@@ -229,7 +236,7 @@ resource "aws_codebuild_project" "app_build" {
     }
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = var.ecr_repository_url # Dynamically set from ECR module
+      value = var.project_name # Dynamically set from ECR module
     }
     environment_variable {
       name  = "CONTAINER_NAME"

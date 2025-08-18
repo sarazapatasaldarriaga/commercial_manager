@@ -73,6 +73,32 @@ resource "aws_ecs_task_definition" "main" {
     {
       name      = var.container_name
       image     = "${var.ecr_repository_url}:latest"
+      environment = [
+        {
+          name  = "SERVER_PORT"
+          value = tostring(var.container_port)
+        },
+        {
+          name  = "SPRING_DATASOURCE_URL"
+          value = "jdbc:mysql://${var.db_endpoint}:${var.db_port}/${var.db_name}"
+        },
+        {
+          name  = "SPRING_DATASOURCE_USERNAME"
+          value = var.db_username
+        },
+        {
+          name  = "SPRING_DATASOURCE_PASSWORD"
+          value = var.db_password
+        },
+        {
+          name  = "SERVER_SSL_KEY_STORE_PASSWORD"
+          value = var.db_password
+        },
+        {
+          name  = "FRONT_ENDPOINT"
+          value = var.front_endpoint
+        }
+      ]
       portMappings = [
         {
           containerPort = var.container_port

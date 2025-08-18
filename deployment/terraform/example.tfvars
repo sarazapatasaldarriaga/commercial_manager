@@ -1,36 +1,57 @@
-# Example Terraform Variable Definitions
-#
-# This file provides example values for the Terraform variables used in this project.
-# You can copy this file to `terraform.tfvars` (and add `terraform.tfvars` to your .gitignore)
-# to provide your actual values, especially for sensitive information like `codestar_connection_arn`.
+# # AWS region for deployment.
+# # Default: "us-east-2"
+# aws_region = "us-east-2"
 
-# AWS Region where resources will be deployed (e.g., "us-east-1", "eu-west-1")
-# default = "us-east-1"
-# aws_region = "us-east-1"
+# # Project name for resource naming.
+# # Default: "commercial-manager"
+# project_name = "commercial-manager"
 
-# Name of the project, used for naming AWS resources
-# default = "commercial-manager"
-# project_name = "my-commercial-app"
+# ------------------------------------------------------------------------------
+# CodePipeline Configuration
+# ------------------------------------------------------------------------------
 
-# GitHub repository owner and name (e.g., "your-org/your-repo")
+# # GitHub repository owner and name for the source code.
 # default = "sarazapatasaldarriaga/commercial_manager"
-# github_repo_owner_name = "your-github-user/your-repo-name"
+# github_repo_owner_name = "sarazapatasaldarriaga/commercial_manager"
 
-# Branch of the GitHub repository to monitor for CI/CD changes
+# # Branch of the GitHub repository to monitor for CI/CD changes
 # default = "main"
 # github_branch_name = "main"
 
 # The ARN of the AWS CodeStar Connection to GitHub.
-# This is crucial for CodePipeline to connect to your GitHub repository.
-# Example: arn:aws:codestar-connections:REGION:ACCOUNT_ID:connection/YOUR_CONNECTION_ID
-# This value should be treated as sensitive and ideally stored in `terraform.tfvars`
-# which is ignored by Git.
-# codestar_connection_arn = "arn:aws:codestar-connections:us-east-1:123456789012:connection/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+# codestar_connection_arn = "arn:aws:codeconnections:xxx"
 
-# The port your application container listens on (e.g., 8080, 3000)
+# # The port your application container listens on
 # default = 8081
 # container_port = 8081
 
-# The desired name for your application container within the ECS task definition
-# default = "commercial-manager-container"
-# container_name = "my-app-container"
+# ------------------------------------------------------------------------------
+# DB Connection Configuration 
+# ------------------------------------------------------------------------------
+
+# # (Required) DB endpoint
+# # No default value is provided for security reasons. You must set this.
+# db_endpoint = "xxx.rds.amazonaws.com"
+
+# # DB port
+# # default = 3306
+# db_port = 3306
+
+# # DB name
+# default = "commercial_manager"
+# db_name = "commercial_manager"
+
+# # DB username
+# # default = "admin"
+# db_username = "admin"
+
+# # (Required) DB password
+# # No default value is provided for security reasons. You must set this.
+# db_password = "YourSecurePasswordHere123!"
+
+# ------------------------------------------------------------------------------
+# Frontend Connection Configuration 
+# ------------------------------------------------------------------------------
+# # (Required) S3 URL for Cross-origin permission
+# # No default value is provided for security reasons. You must set this.
+# front_endpoint = "s3://your-bucket-name.com"
