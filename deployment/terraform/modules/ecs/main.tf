@@ -142,11 +142,6 @@ resource "aws_ecs_service" "main" {
   }
 
   health_check_grace_period_seconds = 60
-
-  depends_on = [aws_iam_service_linked_role.ecs]
 }
 
-# Service-Linked Role for ECS
-resource "aws_iam_service_linked_role" "ecs" {
-  aws_service_name = "ecs.amazonaws.com"
-}
+

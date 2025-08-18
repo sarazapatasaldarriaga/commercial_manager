@@ -60,7 +60,7 @@ variable "container_name" {
 variable "health_check_path" {
   description = "The health check path for the target group."
   type        = string
-  default     = "/"
+  default     = "/actuator/health"
 }
 
 variable "front_endpoint" {

@@ -61,7 +61,7 @@ resource "aws_lb_target_group" "main" {
     enabled             = true
     healthy_threshold   = 2
     interval            = 30
-    matcher             = "200,302,404"
+    matcher             = "200"
     path                = var.health_check_path
     port                = "traffic-port"
     protocol            = "HTTPS"

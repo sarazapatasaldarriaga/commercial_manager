@@ -216,12 +216,12 @@ resource "aws_codebuild_project" "app_build" {
 
   artifacts {
     type = "CODEPIPELINE"
-    name = "build-output" # Name of the artifact produced by CodeBuild
+    name = "build-output"
   }
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:5.0" # Or a more recent image
+    image                       = "aws/codebuild/standard:5.0"
     type                        = "LINUX_CONTAINER"
     privileged_mode             = true # Required for Docker builds
     image_pull_credentials_type = "CODEBUILD"
@@ -240,7 +240,7 @@ resource "aws_codebuild_project" "app_build" {
     }
     environment_variable {
       name  = "CONTAINER_NAME"
-      value = var.container_name # Set to the actual container name from ECS task definition
+      value = var.container_name
     }
   }
 
