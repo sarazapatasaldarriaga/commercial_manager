@@ -71,6 +71,11 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "db_driver_class_name" {
+  description = "The JDBC driver class name for the database."
+  type        = string
+}
+
 variable "front_endpoint" {
   description = "The URL of the frontend for CORS configuration."
   type        = string

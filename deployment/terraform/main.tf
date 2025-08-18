@@ -25,7 +25,7 @@ variable "aws_region" {
 variable "project_name" {
   description = "The name of the project, used for naming resources."
   type        = string
-  default     = "commercial-manager" # Set your project name
+  default     = "commercial-manager"
 }
 
 variable "github_repo_owner_name" {
@@ -93,6 +93,11 @@ variable "db_password" {
   description = "The password for the database."
   type        = string
   sensitive   = true
+}
+
+variable "db_driver_class_name" {
+  description = "The JDBC driver class name for the database."
+  type        = string
 }
 
 # Data sources for VPC and subnets
@@ -170,6 +175,7 @@ module "ecs" {
   db_name              = var.db_name
   db_username          = var.db_username
   db_password          = var.db_password
+  db_driver_class_name = var.db_driver_class_name
   front_endpoint       = var.front_endpoint
 }
 

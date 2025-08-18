@@ -47,7 +47,12 @@
 
 # # (Required) DB password
 # # No default value is provided for security reasons. You must set this.
-# db_password = "YourSecurePasswordHere123!"
+db_password = "YourSecurePasswordHere123!"
+
+# # (Required) DB Driver Class Name
+# # Example for MySQL: "com.mysql.cj.jdbc.Driver"
+# # Example for H2: "org.h2.Driver"
+db_driver_class_name = "com.mysql.cj.jdbc.Driver"
 
 # ------------------------------------------------------------------------------
 # Frontend Connection Configuration 

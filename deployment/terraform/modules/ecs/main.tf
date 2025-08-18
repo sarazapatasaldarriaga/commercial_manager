@@ -83,6 +83,10 @@ resource "aws_ecs_task_definition" "main" {
           value = "jdbc:mysql://${var.db_endpoint}:${var.db_port}/${var.db_name}"
         },
         {
+          name  = "SPRING_DATASOURCE_DRIVER_CLASS_NAME"
+          value = var.db_driver_class_name
+        },
+        {
           name  = "SPRING_DATASOURCE_USERNAME"
           value = var.db_username
         },
