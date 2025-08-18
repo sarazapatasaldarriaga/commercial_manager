@@ -1,11 +1,5 @@
 version: 0.2
 
-# Variables de entorno que deben ser configuradas en el proyecto CodeBuild en la consola de AWS
-# AWS_ACCOUNT_ID: Tu ID de cuenta de AWS (ej: 534224643194)
-# AWS_DEFAULT_REGION: us-east-2
-# IMAGE_REPO_NAME: api-monedas (nombre de tu repositorio ECR)
-# CONTAINER_NAME: api-monedas-container (nombre del contenedor en tu task-definition.json)
-
 phases:
   install:
     runtime-versions:
@@ -15,7 +9,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPOSITORY_URI=$IMAGE_REPO_NAME
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo REPOSITORY_URI=$REPOSITORY_URI
