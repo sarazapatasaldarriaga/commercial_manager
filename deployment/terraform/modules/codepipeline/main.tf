@@ -235,8 +235,8 @@ resource "aws_codebuild_project" "app_build" {
       value = var.aws_region
     }
     environment_variable {
-      name  = "REPOSITORY_URI"
-      value = var.ecr_repository_url
+      name  = "PROJECT_NAME"
+      value = var.project_name
     }
     environment_variable {
       name  = "CONTAINER_NAME"
