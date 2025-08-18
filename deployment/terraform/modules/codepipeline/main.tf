@@ -235,8 +235,8 @@ resource "aws_codebuild_project" "app_build" {
       value = var.aws_region
     }
     environment_variable {
-      name  = "IMAGE_REPO_NAME"
-      value = var.project_name # Dynamically set from ECR module
+      name  = "PROJECT_NAME"
+      value = var.project_name
     }
     environment_variable {
       name  = "CONTAINER_NAME"
