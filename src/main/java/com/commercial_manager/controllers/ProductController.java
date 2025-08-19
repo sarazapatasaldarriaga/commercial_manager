@@ -19,6 +19,8 @@ public class ProductController {
 
     @Autowired
     IProductService productService;
+
+    @Autowired
     ICloudWatchMetricsService metricsService;
 
 

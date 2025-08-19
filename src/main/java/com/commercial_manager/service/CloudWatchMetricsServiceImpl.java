@@ -2,6 +2,7 @@ package com.commercial_manager.service;
 
 
 
+import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.cloudwatch.model.MetricDatum;
 import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataRequest;
@@ -9,6 +10,7 @@ import software.amazon.awssdk.services.cloudwatch.model.StandardUnit;
 
 import java.time.Instant;
 
+@Service
 public class CloudWatchMetricsServiceImpl implements ICloudWatchMetricsService {
 
     private final CloudWatchClient cloudWatchClient = CloudWatchClient.builder().build();
