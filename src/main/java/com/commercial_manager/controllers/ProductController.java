@@ -20,9 +20,6 @@ public class ProductController {
     @Autowired
     IProductService productService;
 
-    @Autowired
-    ICloudWatchMetricsService metricsService;
-
 
     public ProductController(IProductService productService) {
         this.productService = productService;
@@ -30,7 +27,6 @@ public class ProductController {
 
     @GetMapping("/list")
     public List<Product> index() {
-        metricsService.sendMetric("list",1 , "product");
         return productService.findAll();
     }
 
